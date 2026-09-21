@@ -1,0 +1,10 @@
+# Adds host ports for local development (npm run dev). Change the left-hand
+# numbers if 5432 / 6379 are already used on your machine, and update
+# DATABASE_URL / REDIS_URL in .env to match.
+services:
+  db:
+    ports:
+      - "5432:5432"
+  redis:
+    ports:
+      - "6379:6379"

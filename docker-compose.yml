@@ -1,0 +1,46 @@
+# docker compose up --build   ->  http://localhost:3000
+# The databases are NOT published to the host here, so nothing can clash with a
+# Postgres/Redis you already run locally. For `npm run dev` use `npm run db:up`
+# (it adds docker-compose.dev.yml, which publishes 5432 and 6379).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: workspace
+      POSTGRES_PASSWORD: workspace
+      POSTGRES_DB: workspace
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workspace -d workspace"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATABASE_URL: postgres://workspace:workspace@db:5432/workspace
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: local-demo-secret-please-change-0123456789abcdef
+      COOKIE_SECURE: "false" # plain http on localhost
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  pgdata:
