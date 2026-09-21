@@ -4,7 +4,7 @@ A collaborative whiteboard in the spirit of Miro. Several people work on the sam
 
 I kept the feature set small on purpose and put the effort into the parts that are hard to get right: conflict-free syncing, persistence that survives restarts, server-side permissions, and the ability to run more than one server instance.
 
-<!-- Add a screenshot or a short GIF of two browsers editing the same board here, plus a link to the live demo. -->
+**Live demo:** [https://realtime-workspace-2eze.onrender.com](https://realtime-workspace-2eze.onrender.com)
 
 ## Contents
 
